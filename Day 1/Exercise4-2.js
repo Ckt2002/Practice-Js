@@ -1,6 +1,7 @@
-const inputNum = 671001;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
+const inputNum = 1023;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
 const VIETNAMESE_READ_DICT = {
     units: {
+        0: 'không',
         1: 'một',
         2: 'hai',
         3: 'ba',
@@ -45,18 +46,19 @@ function readNum(inputNum) {
         if (temp >= 100) {
             let ten = (temp - temp % 10) / 10;
             temp %= 10;
-            result += VIETNAMESE_READ_DICT.tens[ten - ten % 10]; // get tens
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.tens[ten - ten % 10]); // get tens
             let unit = ten % 10;
 
             if (result != VIETNAMESE_READ_DICT.tens[10] && VIETNAMESE_READ_DICT.special[unit]) {
-                result += ' ' + VIETNAMESE_READ_DICT.special[unit];
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.special[unit]);
             }
             else if (VIETNAMESE_READ_DICT.units[unit])
-                result += ' ' + VIETNAMESE_READ_DICT.units[unit];
-            result += ' ' + VIETNAMESE_READ_DICT.moreThoundsands;
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[unit]);
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.moreThoundsands);
 
             if (temp > 0) {
-                result += ' ' + VIETNAMESE_READ_DICT.units[temp] + ' ' + VIETNAMESE_READ_DICT.thoundsands + ' ';
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[temp]);
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.thoundsands);
             }
         }
     }
@@ -66,26 +68,30 @@ function readNum(inputNum) {
         if (inputNum >= 100) {
             temp = (inputNum - inputNum % 100) / 100;
             inputNum = inputNum % 100;
-            result += VIETNAMESE_READ_DICT.units[temp] + ' ' + VIETNAMESE_READ_DICT.hundred;
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[temp]);
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.hundred);
         }
 
         if (inputNum >= 10) {
             temp = Math.round(inputNum - inputNum % 10);
             inputNum = inputNum % 10;
-            result += ' ' + VIETNAMESE_READ_DICT.tens[temp];
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.tens[temp]);
         }
-        // Fix following when input is an unit
         else if (result !== '' && inputNum > 0)
-            result += ' ' + 'linh';
+            result = addTxtToResult(result, 'linh');
 
-        result += ' ' + VIETNAMESE_READ_DICT.units[inputNum];
+        result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[inputNum]);
     }
 
     console.log(result);
 }
+let result = 'shfgeyugf '
 
-function addToResult(params) {
-
+function addTxtToResult(result, txt) {
+    if (result !== '' && result[result.length - 1] !== ' ') {
+        result += ' ';
+    }
+    return result += txt;
 }
 
 readNum(inputNum);
