@@ -1,4 +1,4 @@
-const inputNum = 990023;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
+const inputNum = 21041;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
 const VIETNAMESE_READ_DICT = {
     units: {
         0: 'không',
@@ -71,7 +71,7 @@ function readNum(inputNum) {
             }
             else if (VIETNAMESE_READ_DICT.units[unit])
                 result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[unit]);
-            result = addTxtToResult(result, VIETNAMESE_READ_DICT.tenThoundsands);
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.thoundsands);
         }
 
         if (temp > 0) {
@@ -96,14 +96,24 @@ function readNum(inputNum) {
         }
 
         if (inputNum >= 10) {
-            temp = Math.round(inputNum - inputNum % 10);
-            inputNum = inputNum % 10;
-            result = addTxtToResult(result, VIETNAMESE_READ_DICT.tens[temp]);
+            // handle ten
+            let ten = inputNum - inputNum % 10;
+            inputNum %= 10;
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.tens[ten - ten % 10]); // get tens
+            let unit = inputNum;
+            inputNum = 0;
+
+            if (result != VIETNAMESE_READ_DICT.tens[10] && VIETNAMESE_READ_DICT.special[unit]) {
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.special[unit]);
+            }
+            else if (VIETNAMESE_READ_DICT.units[unit])
+                result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[unit]);
         }
         else if (result !== '' && inputNum > 0)
             result = addTxtToResult(result, 'linh');
 
-        result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[inputNum]);
+        if (inputNum > 0)
+            result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[inputNum]);
     }
 
     console.log(result);
