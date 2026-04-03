@@ -1,4 +1,4 @@
-const inputNum = 21041;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
+const inputNum = 20021;// chín mươi tám vạn tám nghìn ba trăm bốn mươi lăm
 const VIETNAMESE_READ_DICT = {
     units: {
         0: 'không',
@@ -37,6 +37,11 @@ const VIETNAMESE_READ_DICT = {
 };
 
 function readNum(inputNum) {
+    if (inputNum === 0) {
+        console.log(VIETNAMESE_READ_DICT.units[inputNum]);
+        return;
+    }
+
     let result = '';
     if (inputNum >= 1000) {
         let temp = (inputNum - inputNum % 1000) / 1000;
@@ -69,7 +74,7 @@ function readNum(inputNum) {
             if (result != VIETNAMESE_READ_DICT.tens[10] && VIETNAMESE_READ_DICT.special[unit]) {
                 result = addTxtToResult(result, VIETNAMESE_READ_DICT.special[unit]);
             }
-            else if (VIETNAMESE_READ_DICT.units[unit])
+            else if (unit > 0 && VIETNAMESE_READ_DICT.units[unit])
                 result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[unit]);
             result = addTxtToResult(result, VIETNAMESE_READ_DICT.thoundsands);
         }
@@ -90,7 +95,8 @@ function readNum(inputNum) {
             result = addTxtToResult(result, VIETNAMESE_READ_DICT.hundred);
         }
 
-        if (result !== '') {
+        //! Bug here
+        else if (result !== '') {
             result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[0]);
             result = addTxtToResult(result, VIETNAMESE_READ_DICT.hundred);
         }
@@ -106,7 +112,7 @@ function readNum(inputNum) {
             if (result != VIETNAMESE_READ_DICT.tens[10] && VIETNAMESE_READ_DICT.special[unit]) {
                 result = addTxtToResult(result, VIETNAMESE_READ_DICT.special[unit]);
             }
-            else if (VIETNAMESE_READ_DICT.units[unit])
+            else if (unit > 0 && VIETNAMESE_READ_DICT.units[unit])
                 result = addTxtToResult(result, VIETNAMESE_READ_DICT.units[unit]);
         }
         else if (result !== '' && inputNum > 0)
