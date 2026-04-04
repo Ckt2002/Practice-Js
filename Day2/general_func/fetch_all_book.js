@@ -1,9 +1,10 @@
 import Books from "../data/books_data.js";
 import Book from "../data/book_data.js";
+import FileName from "../utils/File_name.js";
 import { readFile } from "../file_json.js";
 
 export default function fetchAllBooks() {
-    const content = readFile('Books');
+    const content = readFile(FileName.Books);
     const obj = JSON.parse(content);
     const books = new Books();
 

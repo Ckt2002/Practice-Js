@@ -4,27 +4,26 @@ import findBook from "./general_func/find_book.js";
 import saveBook from "./general_func/save_book.js";
 import rl from "./setup_readline.js";
 
-export default function removeBookMenu(callBackToMain) {
+export default function editBookMenu(callBackToMain) {
     const books = fetchAllBooks();
-    const bookArr = books.books;
+    const bookArr = books.bookArr;
     const booksName = [];
 
     for (let index = 0; index < bookArr.length; index++) {
-        booksName.push(`"${bookArr[index].title}" `);
+        booksName.push(`"${bookArr[index].title}"`);
     }
 
-    SetTitle("Remove book", booksName);
+    SetTitle("Edit book", booksName);
 
-    rl.question('Enter 0 to exit or enter book title to remove: ', (input) => {
+    rl.question('Enter 0 to exit editing or enter book title to start editing: ', (input) => {
         switch (input) {
             case '0':
                 callBackToMain();
                 break;
 
             default:
-                removeConfirm(
-                    () => removeBookMenu(callBackToMain),
-                    bookArr,
+                editBookForm(
+                    () => editBookMenu(callBackToMain),
                     findBook(bookArr, input),
                     () => saveBook(books));
                 break;
@@ -32,25 +31,30 @@ export default function removeBookMenu(callBackToMain) {
     });
 }
 
-function removeConfirm(callBackToMenu, booksArr, bookData, saveCallBack) {
+function editBookForm(callBackToMenu, bookData, saveCallBack) {
     if (!bookData) {
         console.log("Can't find book. Try again.");
         callBackToMenu();
         return;
     }
 
-    rl.question('Enter anythings to accept removing or "n" to cancel: ', (input) => {
+    SetTitle(`${bookData.id} - ${bookData.title}`, null);
+
+    rl.question('Enter 0 to return or enter new title to change book title: ', (input) => {
         switch (input) {
-            case 'n':
+            case '0':
                 callBackToMenu();
                 break;
 
             default:
-                const index = booksArr.indexOf(bookData);
-                booksArr = booksArr.splice(index, 1);
+                edit(bookData, input);
                 saveCallBack();
                 callBackToMenu();
                 break;
         }
     });
+}
+
+function edit(book, newTitle) {
+    book.title = newTitle;
 }

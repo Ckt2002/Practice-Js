@@ -1,14 +1,14 @@
 export default class Books {
     constructor() {
-        this.books = [];
+        this.bookArr = [];
     }
 
     addBook(newBook) {
-        for (let book of this.books) {
+        for (let book of this.bookArr) {
             if (book.getTitle() === newBook.getTitle()) {
                 return;
             }
         }
-        this.books.push(newBook);
+        this.bookArr.push(newBook);
     }
 }
